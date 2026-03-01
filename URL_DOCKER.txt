@@ -1,0 +1,15 @@
+DockerHub Repository:
+https://hub.docker.com/repository/docker/ahmadngiliyun00/workflow-ci-student-success/general
+
+Image Tag:
+ahmadngiliyun00/workflow-ci-student-success:latest
+
+Pull Command (untuk verifikasi):
+docker pull ahmadngiliyun00/workflow-ci-student-success:latest
+
+Catatan untuk Reviewer:
+- Image ini dibuat dari proses workflow CI (pipeline) dan dipush ke DockerHub.
+- Jika saat melakukan pull muncul error seperti:
+  "no matching manifest for linux/arm64/v8"
+  maka itu karena image ini saat ini tersedia untuk platform linux/amd64.
+- Jika environment Reviewer menggunakan ARM (mis. Apple Silicon/arm64), silakan gunakan mesin/runner linux/amd64 untuk pull & run image ini.

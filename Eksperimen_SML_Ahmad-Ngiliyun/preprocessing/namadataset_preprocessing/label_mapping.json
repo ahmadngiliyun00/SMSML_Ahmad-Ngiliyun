@@ -1,0 +1,12 @@
+{
+  "label_to_id": {
+    "Dropout": 0,
+    "Enrolled": 1,
+    "Graduate": 2
+  },
+  "id_to_label": {
+    "0": "Dropout",
+    "1": "Enrolled",
+    "2": "Graduate"
+  }
+}
