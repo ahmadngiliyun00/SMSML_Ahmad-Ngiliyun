@@ -4,8 +4,7 @@ import mlflow
 import mlflow.sklearn
 
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, f1_score, classification_report, confusion_matrix
-import matplotlib.pyplot as plt
+from sklearn.metrics import accuracy_score
 
 
 def load_data(data_dir: str):
@@ -17,55 +16,25 @@ def load_data(data_dir: str):
 
 
 def main():
-    # Pastikan tracking ke lokal (sesuai instruksi)
+    # Tracking lokal (sesuai kebutuhanmu)
     mlflow.set_tracking_uri("http://127.0.0.1:5000")
     mlflow.set_experiment("Student_Academic_Success_Basic")
 
     data_dir = os.path.join(os.path.dirname(__file__), "namadataset_preprocessing")
     X_train, X_test, y_train, y_test = load_data(data_dir)
 
-    # autolog untuk Basic
+    # AUTLOG ONLY (tanpa manual log sama sekali)
     mlflow.sklearn.autolog(log_models=True)
 
-    with mlflow.start_run():
-        model = LogisticRegression(max_iter=2000, n_jobs=None)
+    with mlflow.start_run(run_name="basic_autolog_logreg"):
+        model = LogisticRegression(max_iter=2000)
         model.fit(X_train, y_train)
 
         y_pred = model.predict(X_test)
-
         acc = accuracy_score(y_test, y_pred)
-        f1m = f1_score(y_test, y_pred, average="macro")
 
-        # Log metric tambahan manual (boleh, tidak mengganggu autolog)
-        mlflow.log_metric("test_accuracy_manual", float(acc))
-        mlflow.log_metric("test_f1_macro_manual", float(f1m))
-
-        # Artifact sederhana: confusion matrix image (biar jelas ada artifact)
-        cm = confusion_matrix(y_test, y_pred)
-        plt.figure()
-        plt.imshow(cm)
-        plt.title("Confusion Matrix")
-        plt.xlabel("Pred")
-        plt.ylabel("True")
-        plt.colorbar()
-        plt.tight_layout()
-
-        artifact_dir = "artifacts"
-        os.makedirs(artifact_dir, exist_ok=True)
-        cm_path = os.path.join(artifact_dir, "confusion_matrix.png")
-        plt.savefig(cm_path, dpi=200)
-        plt.close()
-
-        mlflow.log_artifact(cm_path)
-
-        # Simpan report text juga (opsional tapi bagus)
-        report = classification_report(y_test, y_pred)
-        report_path = os.path.join(artifact_dir, "classification_report.txt")
-        with open(report_path, "w") as f:
-            f.write(report)
-        mlflow.log_artifact(report_path)
-
-        print("Done. acc=", acc, "f1_macro=", f1m)
+        # Output boleh (bukan logging ke MLflow)
+        print("Done. test_accuracy =", float(acc))
 
 
 if __name__ == "__main__":
